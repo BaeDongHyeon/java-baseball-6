@@ -15,6 +15,8 @@ public class Game {
 
     private Map<String, Integer> gameResult = new HashMap<>();
 
+    private Integer gameStatus = 1;
+
     public Game() {
         System.out.println("숫자 야구 게임을 시작합니다.");
 
@@ -22,9 +24,17 @@ public class Game {
     }
 
     public void play() {
-        System.out.print("숫자를 입력해주세요 : ");
+        do {
+            System.out.print("숫자를 입력해주세요 : ");
 
-        user.setting(Console.readLine());
+            user.setting(Console.readLine());
+
+            check();
+
+            result();
+
+            gameEndCheck();
+        } while (gameStatus == 1);
     }
 
     public void check() {
@@ -67,10 +77,33 @@ public class Game {
 
         gameResult.clear();
         gradeReset();
+        gameStatus = 1;
     }
 
     private void gradeReset() {
         gameResult.put("ball", 0);
         gameResult.put("strike", 0);
+    }
+
+    private void gameEndCheck() {
+        if (gameResult.get("strike") == 3) {
+            System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+            System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+            String command = Console.readLine();
+            if (!command.matches("[0-9]+")) {
+                throw new IllegalArgumentException("입력은 숫자로만 할 수 있습니다.");
+            }
+            if (!command.equals("1") && !command.equals("2")) {
+                throw new IllegalArgumentException("시작 여부는 1 또는 2만 입력할 수 있습니다.");
+            }
+
+            if (Integer.parseInt(command) == 1) {
+                reset();
+            } else {
+                gameStatus = 0;
+            }
+        } else {
+            gradeReset();
+        }
     }
 }
