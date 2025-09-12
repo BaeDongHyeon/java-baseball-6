@@ -19,7 +19,6 @@ public class Game {
 
     public Game() {
         System.out.println("숫자 야구 게임을 시작합니다.");
-
         gradeReset();
     }
 
@@ -89,15 +88,9 @@ public class Game {
         if (gameResult.get("strike") == 3) {
             System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
             System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-            String command = Console.readLine();
-            if (!command.matches("[0-9]+")) {
-                throw new IllegalArgumentException("입력은 숫자로만 할 수 있습니다.");
-            }
-            if (!command.equals("1") && !command.equals("2")) {
-                throw new IllegalArgumentException("시작 여부는 1 또는 2만 입력할 수 있습니다.");
-            }
+            Command command = Command.findByNumber(Console.readLine());
 
-            if (Integer.parseInt(command) == 1) {
+            if (command == Command.RESTART) {
                 reset();
             } else {
                 gameStatus = 0;
